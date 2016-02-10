@@ -1,9 +1,9 @@
 var particleSystem = [];
 var attractors = []; 
-/*var awesomeSound;
+var awesomeSound;
 function preload(){
-    awesomeSound = loadSound('explosion.m4a');
-}*/
+    awesomeSound = loadSound('242374__ascap__mallet-hit-low-glass-bowl-5.mp3');
+}
 
 //creates canvas, runs once per time screen is refreshed
 function setup() {
@@ -13,8 +13,8 @@ function setup() {
     colorMode(HSB, 360, 100, 100, 100);
     background(0);
     
-    for (var i=0; i<8; i++){
-        var at = new Attractor(createVector((i+1)*(width/9), height/2), 2);
+    for (var i=0; i<12; i++){
+        var at = new Attractor(createVector((i+1)*(width/13), height/2), 2);
         attractors.push(at);
     };
 }
@@ -22,7 +22,7 @@ function setup() {
 
 //draw everything on the screen - makes screen happen to update at the specified rate
 function draw(){
-    background(0, 0, 0, 10);
+    background(0, 0, 0, 5);
     blendMode(SCREEN);
     
     for (var i=particleSystem.length-1; i>=0; i--){
@@ -74,15 +74,14 @@ var Particle = function(pp, vv, hue){
     var pp = pp.copy();
     var vv = vv.copy();
     var acc = createVector(0, 0.4);
-    var psize = random(3, 15);
+    var psize = random(2, 5);
     var lifeSpan = initialLifeSpan;
-    var hue = random(hue-15, hue+15);
+    var hue = random(hue-10, hue+15);
     
     //allows particle to update itself - change the values stored inside of that function
     this.update = function(){
         lifeSpan--; 
         vv = vv.add(acc);
-        //take vv, make a copy, add the acceleration to it
         pp = pp.add(vv);  
         
         attractors.forEach(function(A){
@@ -100,14 +99,14 @@ var Particle = function(pp, vv, hue){
         vv.add(acc);
         pp.add(vv);
         acc.mult(0);
-        vv.limit(8);
+        vv.limit(9);
+        
     }  
     
     
     this.draw = function(){
         var transparency = map(lifeSpan, 0, initialLifeSpan, 0, 100);
         stroke(hue, 100, 100, transparency);
-        //line(pp.x, pp.y, pp.x - 3 * vv.x, pp.y - 3 * vv.y);    
         fill(hue, 100, 100, transparency);
         noStroke();
         ellipse(pp.x, 
@@ -124,7 +123,7 @@ var Particle = function(pp, vv, hue){
 
 //create particle on mouse click
 function createMightyParticles(focalPoint){
-    //awesomeSound.play();
+    awesomeSound.play();
     var hue = random(20, 300);
     var pp;
     if(!focalPoint){
@@ -132,7 +131,7 @@ function createMightyParticles(focalPoint){
     }else{
         pp = createVector(focalPoint.x, focalPoint.y);
     } 
-    var numberOfParticles = random(10, 30);
+    var numberOfParticles = random(15, 35);
     for(var i=0; i<numberOfParticles; i++){
         var vv = createVector(0, 1);
         vv.rotate(random(0, TWO_PI));
@@ -172,10 +171,8 @@ var Attractor = function(pos, s){
     this.draw = function() {
         noStroke();
         fill(170, 100, 50);
-        rect(pos.x, pos.y, 2, 100);
+        ellipse(pos.x, pos.y, 3, 3);
         
-        /*ellipse(pos.x, pos.y,
-                30, 30);*/
     }
     
     this.getStrength = function(){
